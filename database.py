@@ -992,10 +992,13 @@ def save_timetable_run(
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("""
-            INSERT INTO timetable_runs (admin_id, solver_status, objective_value, quality_score, status, message)
-            VALUES (?, ?, ?, ?, ?, ?);
-        """, (admin_id, solver_status, objective_value, quality_score, status, message))
-        run_id = cursor.lastrowid
+    INSERT INTO timetable_runs
+        (admin_id, solver_status, objective_value, quality_score, status, message)
+    VALUES (?, ?, ?, ?, ?, ?)
+    RETURNING id;
+""", (admin_id, solver_status, objective_value, quality_score, status, message))
+
+run_id = cursor.fetchone()["id"]
 
         for entry in entries:
             cursor.execute("""
