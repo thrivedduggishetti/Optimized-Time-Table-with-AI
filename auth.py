@@ -69,6 +69,9 @@ def register_admin(username: str, password: str, confirm_password: str) -> tuple
         except Exception:
             pass
         return True, f"Administrator account '{username}' created successfully! You can now log in."
+    else:
+        return False, "Failed to create administrator account due to a database error."
+
 
 
 def authenticate_admin(username: str, password: str) -> tuple[bool, str, dict | None]:
